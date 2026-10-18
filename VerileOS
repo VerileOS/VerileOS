@@ -1,0 +1,341 @@
+document.documentElement.innerHTML = `
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VerileOS</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Arial,sans-serif;
+color:white;
+background:
+radial-gradient(circle at 20% 10%,#6824d6,#19102f 40%,#070711 80%);
+transition:.4s;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:45px 20px 100px;
+}
+
+.logo{
+text-align:center;
+font-size:70px;
+font-weight:900;
+letter-spacing:-4px;
+text-shadow:0 10px 40px #000;
+}
+
+.search{
+display:block;
+width:min(750px,100%);
+margin:20px auto 35px;
+padding:17px 20px;
+border-radius:18px;
+border:1px solid #ffffff30;
+background:#ffffff12;
+color:white;
+font-size:18px;
+outline:none;
+}
+
+.search::placeholder{
+color:#ffffff88;
+}
+
+.panel{
+background:#ffffff0d;
+border:1px solid #ffffff18;
+border-radius:24px;
+padding:22px;
+margin-bottom:20px;
+backdrop-filter:blur(15px);
+}
+
+h2{
+margin-top:0;
+}
+
+.soundboard{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+gap:10px;
+}
+
+button{
+border:1px solid #ffffff20;
+border-radius:14px;
+padding:13px;
+background:#ffffff10;
+color:white;
+cursor:pointer;
+font-weight:bold;
+}
+
+button:hover{
+background:#ffffff25;
+transform:translateY(-2px);
+}
+
+.games{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+gap:15px;
+}
+
+.game{
+height:120px;
+text-align:left;
+}
+
+.settings{
+position:fixed;
+right:18px;
+bottom:18px;
+}
+
+.gear{
+width:55px;
+height:55px;
+border-radius:50%;
+font-size:22px;
+}
+
+.menu{
+display:none;
+position:absolute;
+right:0;
+bottom:65px;
+width:280px;
+padding:18px;
+border-radius:20px;
+background:#101015ee;
+border:1px solid #ffffff25;
+box-shadow:0 20px 60px #000;
+}
+
+.menu.open{
+display:block;
+}
+
+.menu button{
+margin:5px;
+}
+
+input[type=file]{
+margin-top:10px;
+max-width:100%;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="logo">VerileOS</div>
+
+<!-- Standalone search bar -->
+<input
+class="search"
+placeholder="Search or paste something..."
+autocomplete="off"
+>
+
+<div class="panel">
+
+<h2>🔊 Soundboard</h2>
+
+<p>
+Upload your own audio files and they'll automatically become sound buttons.
+</p>
+
+<input id="audio" type="file" accept="audio/*" multiple>
+
+<br><br>
+
+<div id="sounds" class="soundboard"></div>
+
+</div>
+
+<div class="panel">
+
+<h2>🎮 Games</h2>
+
+<div class="games">
+
+<button class="game">
+🎮 Game Slot 1
+</button>
+
+<button class="game">
+🎮 Game Slot 2
+</button>
+
+<button class="game">
+🎮 Game Slot 3
+</button>
+
+<button class="game">
+🎮 Game Slot 4
+</button>
+
+<button class="game">
+🎮 Game Slot 5
+</button>
+
+<button class="game">
+🎮 Game Slot 6
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="settings">
+
+<button class="gear" id="gear">
+⚙️
+</button>
+
+<div class="menu" id="menu">
+
+<h3>VerileOS Settings</h3>
+
+<p>Background</p>
+
+<button onclick="purple()">🟣 Purple</button>
+<button onclick="blue()">🔵 Blue</button>
+<button onclick="green()">🟢 Green</button>
+<button onclick="dark()">⚫ Dark</button>
+
+<p>Upload background</p>
+
+<input id="background" type="file" accept="image/*">
+
+<br><br>
+
+<button onclick="openBlank()">
+Open in new tab
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const gear=document.getElementById("gear");
+const menu=document.getElementById("menu");
+
+gear.onclick=()=>{
+menu.classList.toggle("open");
+};
+
+
+/* SOUND UPLOAD */
+
+document.getElementById("audio").onchange=function(){
+
+const area=document.getElementById("sounds");
+
+[...this.files].forEach(file=>{
+
+const url=URL.createObjectURL(file);
+
+const button=document.createElement("button");
+
+button.textContent="▶ "+file.name.replace(/\.[^/.]+$/,"");
+
+button.onclick=()=>{
+
+const sound=new Audio(url);
+
+sound.play();
+
+};
+
+area.appendChild(button);
+
+});
+
+};
+
+
+/* BACKGROUNDS */
+
+function purple(){
+
+document.body.style.background=
+"radial-gradient(circle at 20% 10%,#6824d6,#19102f 40%,#070711 80%)";
+
+}
+
+function blue(){
+
+document.body.style.background=
+"radial-gradient(circle at 80% 10%,#0879bd,#111827 45%,#05060b 80%)";
+
+}
+
+function green(){
+
+document.body.style.background=
+"radial-gradient(circle at 20% 10%,#087f57,#10251e 45%,#050908 80%)";
+
+}
+
+function dark(){
+
+document.body.style.background=
+"radial-gradient(circle,#292929,#050505 80%)";
+
+}
+
+
+/* CUSTOM BACKGROUND */
+
+document.getElementById("background").onchange=function(){
+
+const file=this.files[0];
+
+if(!file)return;
+
+const url=URL.createObjectURL(file);
+
+document.body.style.background=
+`center/cover fixed url("${url}")`;
+
+};
+
+
+/* NEW TAB */
+
+function openBlank(){
+
+const page=window.open("about:blank","_blank");
+
+if(page){
+
+page.document.write(document.documentElement.outerHTML);
+
+page.document.close();
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
+`;
